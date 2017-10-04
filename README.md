@@ -44,6 +44,12 @@ foreach ($collection as $key => $value) {
 echo $picker->pick(); // Will be mostly foo or bar
 ```
 
+Of course you can also simply pick a random value with a simple, no-weighted set:
+```php
+$picker = Picker::create()->withItems('foo', 'bar', 'baz');
+echo $picker->pick(); // Will be a truly random value between foo, bar and baz
+```
+
 Installation
 ------------
 

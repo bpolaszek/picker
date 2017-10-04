@@ -65,6 +65,15 @@ final class Picker implements \IteratorAggregate
         return $object;
     }
 
+    public function withItems(...$values)
+    {
+        $object = $this;
+        foreach ($values as $key => $value) {
+            $object = $object->withItem($key, $value);
+        }
+        return $object;
+    }
+
     /**
      * @param $key
      * @return Picker

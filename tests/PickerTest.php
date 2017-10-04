@@ -143,6 +143,21 @@ class PickerTest extends TestCase
         $this->assertEqualsApproximatively(20, $foos, 10);
         $this->assertEqualsApproximatively(80, $bars, 10);
     }
+
+    public function testMultipleItemsWithNoWeight()
+    {
+        $picker = Picker::create()->withItems('foo', 'bar');
+        for ($foos = 0, $bars = 0, $i = 1; $i <= 100; $i++) {
+            $value = $picker->pick();
+            if ('foo' === $value) {
+                $foos++;
+            } elseif ('bar' === $value) {
+                $bars++;
+            }
+        }
+        $this->assertEqualsApproximatively(50, $foos, 10);
+        $this->assertEqualsApproximatively(50, $bars, 10);
+    }
     
     private function assertEqualsApproximatively($expected, $value, $tolerance)
     {
