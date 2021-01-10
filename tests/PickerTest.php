@@ -3,167 +3,114 @@
 namespace BenTools\Picker\Tests;
 
 use BenTools\Picker\Picker;
-use PHPUnit\Framework\TestCase;
 
-class PickerTest extends TestCase
-{
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Default weight must be greater than or equal 0.
-     */
-    public function testNegativeDefaultWeight()
-    {
-        new Picker(-1);
-    }
+it('cannot have a negative default weight', function () {
+    Picker::create(-1);
+})->throws(
+    \InvalidArgumentException::class,
+    '`defaultWeight` must be a positive integer.'
+);
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Default weight must be an integer.
-     */
-    public function testNotIntegerDefaultWeight()
-    {
-        new Picker(5.8);
-    }
+it('can have a 0 weight', function () {
+    Picker::create(0);
+    expect(true)->toBe(true);
+});
 
-    public function testAddItemWithDefaultWeight()
-    {
-        $picker = Picker::create(10)->withItem('foo', 'bar');
-        $this->assertEquals(10, $picker->getWeightFor('foo'));
-    }
+it('can have a positive weight', function () {
+    Picker::create(10);
+    expect(true)->toBe(true);
+});
 
-    public function testAddItemWithSpecificWeight()
-    {
-        $picker = Picker::create(10)->withItem('foo', 'bar', 15);
-        $this->assertEquals(15, $picker->getWeightFor('foo'));
-    }
+it('can have a default weight', function () {
+    Picker::create();
+    expect(true)->toBe(true);
+});
 
-    /**
-     * @expectedException  \InvalidArgumentException
-     * @expectedExceptionMessage Item key must be scalar.
-     */
-    public function testAddItemWithInvalidKey()
-    {
-        Picker::create()->withItem(new \stdClass(), 'bar');
-    }
+it('cannot add an item with a negative weight', function () {
+    Picker::create()->withItem(new \stdClass(), -1);
+})->throws(
+    \InvalidArgumentException::class,
+    '`weight` must be a positive integer.'
+);
 
-    /**
-     * @expectedException  \InvalidArgumentException
-     * @expectedExceptionMessage Item weight must be an integer.
-     */
-    public function testAddItemWithNonIntegerWeight()
-    {
-        Picker::create()->withItem('foo', 'bar', 10.2);
-    }
+it('can add an item with a 0 weight', function () {
+    $item = new \stdClass();
+    $picker = Picker::create()->withItem($item, 0);
+    $picker->pick();
+})->throws(\RuntimeException::class, 'Nothing to pick.');
 
-    /**
-     * @expectedException  \InvalidArgumentException
-     * @expectedExceptionMessage Item weight must be greater than or equal 0.
-     */
-    public function testAddItemWithNegativeWeight()
-    {
-        Picker::create()->withItem('foo', 'bar', -50);
+it('can add an item with a positive weight', function () {
+    $item = new \stdClass();
+    $picker = Picker::create()->withItem($item, 10);
+    expect($picker->pick())->toBe($item);
+});
+
+it('can add an item with a default weight', function () {
+    $item = new \stdClass();
+    $picker = Picker::create()->withItem($item);
+    expect($picker->pick())->toBe($item);
+});
+
+it('evenly picks items', function () {
+    $picker = Picker::create()
+        ->withItem('foo', 500)
+        ->withItem('bar', 500);
+
+    $items = [];
+    for ($i = 0; $i < 1000; $i++) {
+        $items[] = $picker->pick();
     }
 
-    public function testGetItems()
-    {
-        $picker = Picker::create()->withItem('foo', 'bar')->withItem('bar', 'baz');
-        $this->assertEquals(['foo' => 'bar', 'bar' => 'baz'], $picker->getItems());
-        $picker = $picker->withoutItem('foo');
-        $this->assertEquals(['bar' => 'baz'], $picker->getItems());
+    $foos = \array_filter($items, function (string $item) {
+        return 'foo' === $item;
+    });
+
+    $bars = \array_filter($items, function (string $item) {
+        return 'bar' === $item;
+    });
+
+    expect(\count($foos))->toEqualWithDelta(500, 50);
+    expect(\count($bars))->toEqualWithDelta(500, 50);
+});
+
+it('evenly picks items with an array of items', function () {
+    $picker = Picker::create(500)->withItems(['foo', 'bar']);
+
+    $items = [];
+    for ($i = 0; $i < 1000; $i++) {
+        $items[] = $picker->pick();
     }
 
-    public function testGetWeights()
-    {
-        $picker = Picker::create(15)->withItem('foo', 'bar')->withItem('bar', 'baz', 20);
-        $this->assertEquals(['foo' => 15, 'bar' => 20], $picker->getWeights());
-        $picker = $picker->withoutItem('foo');
-        $this->assertEquals(['bar' => 20], $picker->getWeights());
+    $foos = \array_filter($items, function (string $item) {
+        return 'foo' === $item;
+    });
+
+    $bars = \array_filter($items, function (string $item) {
+        return 'bar' === $item;
+    });
+
+    expect(\count($foos))->toEqualWithDelta(500, 50);
+    expect(\count($bars))->toEqualWithDelta(500, 50);
+});
+
+it('picks more foos that bars', function () {
+    $picker = Picker::create()
+        ->withItem('foo', 800)
+        ->withItem('bar', 200);
+
+    $items = [];
+    for ($i = 0; $i < 1000; $i++) {
+        $items[] = $picker->pick();
     }
 
-    public function testPick()
-    {
-        $picker = Picker::create(15)->withItem('foo', 'bar')->withItem('bar', 'baz', 20);
-        for ($data = [], $i = 1; $i <= 100; $i++) {
-            $data[] = $picker->pick();
-        }
-        $this->assertContains('bar', $data);
-        $this->assertContains('baz', $data);
-    }
+    $foos = \array_filter($items, function (string $item) {
+        return 'foo' === $item;
+    });
 
-    public function testPickWithDisabledItem()
-    {
-        $picker = Picker::create(15)->withItem('foo', 'bar')->withItem('bar', 'baz', 0);
-        for ($data = [], $i = 1; $i <= 100; $i++) {
-            $data[] = $picker->pick();
-        }
-        $this->assertContains('bar', $data);
-        $this->assertNotContains('baz', $data);
-    }
+    $bars = \array_filter($items, function (string $item) {
+        return 'bar' === $item;
+    });
 
-    public function testPickWithNothingEnabled()
-    {
-        $picker = Picker::create(15)->withItem('foo', 'bar', 0)->withItem('bar', 'baz', 0);
-        for ($data = [], $i = 1; $i <= 100; $i++) {
-            $data[] = $picker();
-        }
-        $this->assertNotContains('bar', $data);
-        $this->assertNotContains('baz', $data);
-        $this->assertEquals(array_fill(0, 100, null), $data);
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage There is no item to pick.
-     */
-    public function testPickWithNoItem()
-    {
-        Picker::create()->pick();
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Item bar not found.
-     */
-    public function testRemoveNotExistingItem()
-    {
-        Picker::create()->withoutItem('bar');
-    }
-
-    public function testRandomness()
-    {
-        $picker = Picker::create(15)->withItem(0, 'foo', 20)->withItem(1, 'bar', 80);
-        for ($foos = 0, $bars = 0, $i = 1; $i <= 100; $i++) {
-            $value = $picker->pick();
-            if ('foo' === $value) {
-                $foos++;
-            } elseif ('bar' === $value) {
-                $bars++;
-            }
-        }
-        $this->assertEqualsApproximatively(20, $foos, 10);
-        $this->assertEqualsApproximatively(80, $bars, 10);
-    }
-
-    public function testMultipleItemsWithNoWeight()
-    {
-        $picker = Picker::create()->withItems('foo', 'bar');
-        for ($foos = 0, $bars = 0, $i = 1; $i <= 100; $i++) {
-            $value = $picker->pick();
-            if ('foo' === $value) {
-                $foos++;
-            } elseif ('bar' === $value) {
-                $bars++;
-            }
-        }
-        $this->assertEqualsApproximatively(50, $foos, 10);
-        $this->assertEqualsApproximatively(50, $bars, 10);
-    }
-    
-    private function assertEqualsApproximatively($expected, $value, $tolerance)
-    {
-        $left = $expected - $tolerance;
-        $right = $expected + $tolerance;
-        $this->assertGreaterThanOrEqual($left, $value);
-        $this->assertLessThanOrEqual($right, $value);
-    }
-}
+    expect(\count($foos))->toEqualWithDelta(800, 50);
+    expect(\count($bars))->toEqualWithDelta(200, 50);
+});
