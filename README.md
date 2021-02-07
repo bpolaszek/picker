@@ -7,11 +7,8 @@
 
 # Picker
 
-Let's say you have a collection of objects / values / things / whatever. 
-
-You want to pick a random value, but with a weight management.
-
-Here it is.
+This simple library will help you pick a random item through a collection of items (string, objects, ints, whatever), 
+by optionally giving them a weight.
 
 Usage
 -----
@@ -23,22 +20,22 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 $collection = [
     [
-        'value'  => 'foo',
-        'weight' => 80,
+        'foo',
+        80,
     ],
     [
-        'value'  => 'bar',
-        'weight' => 60,
+        'bar',
+        60,
     ],
     [
-        'value'  => 'baz',
-        'weight' => 5,
+        'baz',
+        5,
     ],
 ];
 
 $picker = Picker::create();
-foreach ($collection as $key => $value) {
-    $picker = $picker->withItem($key, $value['value'], $value['weight']);
+foreach ($collection as $key => [$value, $weight]) {
+    $picker = $picker->withItem($value, $weight);
 }
 
 echo $picker->pick(); // Will be mostly foo or bar
@@ -46,21 +43,21 @@ echo $picker->pick(); // Will be mostly foo or bar
 
 Of course you can also simply pick a random value with a simple, no-weighted set:
 ```php
-$picker = Picker::create()->withItems('foo', 'bar', 'baz');
+$picker = Picker::create()->withItems(['foo', 'bar', 'baz']);
 echo $picker->pick(); // Will be a truly random value between foo, bar and baz
 ```
 
 Installation
 ------------
 
-This library requires PHP 5.6+.
+This library requires PHP 7.3+.
 
 > composer require bentools/picker
 
 Tests
 -----
 
-> ./vendor/bin/phpunit
+> ./vendor/bin/pest
 
 
 See also
