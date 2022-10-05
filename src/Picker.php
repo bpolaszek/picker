@@ -16,17 +16,23 @@ final class Picker
      */
     private $items = [];
 
-    public function __construct(int $defaultWeight = 1)
+    /**
+     * @var bool
+     */
+    private $shift;
+
+    public function __construct(int $defaultWeight = 1, bool $shift = false)
     {
         if ($defaultWeight < 0) {
             throw new \InvalidArgumentException('`defaultWeight` must be a positive integer.');
         }
         $this->defaultWeight = $defaultWeight;
+        $this->shift = $shift;
     }
 
-    public static function create(int $defaultWeight = 1): self
+    public static function create(int $defaultWeight = 1, bool $shift = false): self
     {
-        return new self($defaultWeight);
+        return new self($defaultWeight, $shift);
     }
 
     public function withItem($item, ?int $weight = null): self
@@ -71,6 +77,11 @@ final class Picker
         $index = $indexes[\random_int(0, $max)];
 
         [$item] = $this->items[$index];
+
+        if ($this->shift) {
+            unset($this->items[$index]);
+            $this->items = \array_values($this->items);
+        }
 
         return $item;
     }

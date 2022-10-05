@@ -114,3 +114,19 @@ it('picks more foos that bars', function () {
     expect(\count($foos))->toEqualWithDelta(800, 50);
     expect(\count($bars))->toEqualWithDelta(200, 50);
 });
+
+it('can shift items once they\'re picked', function () {
+    $picker = Picker::create(1, true);
+    $picker = $picker->withItem('foo', 1000000);
+    $picker = $picker->withItem('bar', 1);
+
+    expect($picker->pick())->toBe('foo'); // 1 chance out of 1 million it's `bar`!
+    expect($picker->pick())->toBe('bar');
+    try {
+        $picker->pick(); // Should throw an exception
+        expect(true)->toBeFalse();
+    } catch (\Exception $e) {
+        expect($e)->toBeInstanceOf(\RuntimeException::class);
+        expect($e->getMessage())->toBe('Nothing to pick.');
+    }
+});
