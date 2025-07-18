@@ -27,8 +27,8 @@
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "@stable",
-    "symfony/var-dumper": "^5.0",
-    "pestphp/pest": "^1.0"
+    "symfony/var-dumper": "^5.4|^6.4|^7.1",
+    "pestphp/pest": "^1.22|^2.36|^3.5"
   },
   "config": {
     "allow-plugins": {
