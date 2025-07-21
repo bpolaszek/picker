@@ -1,0 +1,32 @@
+<?php
+
+declare(strict_types=1);
+
+namespace BenTools\Picker\ItemPicker;
+
+use BenTools\Picker\ItemPicker\Algorithm\Algorithm;
+use BenTools\Picker\ItemPicker\Weight\NullWeightProvider;
+use BenTools\Picker\ItemPicker\Weight\WeightProviderInterface;
+use InvalidArgumentException;
+
+use const PHP_INT_MAX;
+
+final class ItemPickerOptions
+{
+    public function __construct(
+        public readonly Algorithm $algorithm = Algorithm::RANDOM,
+        public readonly int $defaultWeight = 1,
+        public readonly bool $allowDuplicates = true,
+        public readonly int $maxLoops = PHP_INT_MAX,
+        public ?int $seed = null,
+        public readonly bool $incrementSeed = false,
+        public readonly WeightProviderInterface $weights = new NullWeightProvider(),
+    ) {
+        if ($this->defaultWeight < 0) {
+            throw new InvalidArgumentException('Default weight must be non-negative');
+        }
+        if ($this->maxLoops < 0) {
+            throw new InvalidArgumentException('Max loops must be non-negative');
+        }
+    }
+}

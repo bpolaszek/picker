@@ -13,7 +13,7 @@ Usage
 -----
 
 ```php
-use BenTools\Picker\Picker;
+use BenTools\Picker\ItemPicker\ItemPicker;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -32,7 +32,7 @@ $collection = [
     ],
 ];
 
-$picker = Picker::create();
+$picker = ItemPicker::create();
 foreach ($collection as $key => [$value, $weight]) {
     $picker = $picker->withItem($value, $weight);
 }

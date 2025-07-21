@@ -2,32 +2,32 @@
 
 namespace BenTools\Picker\Tests;
 
-use BenTools\Picker\Picker;
+use BenTools\Picker\ItemPicker\ItemPicker;
 
 it('cannot have a negative default weight', function () {
-    Picker::create(-1);
+    ItemPicker::create(-1);
 })->throws(
     \InvalidArgumentException::class,
     '`defaultWeight` must be a positive integer.'
 );
 
 it('can have a 0 weight', function () {
-    Picker::create(0);
+    ItemPicker::create(0);
     expect(true)->toBe(true);
 });
 
 it('can have a positive weight', function () {
-    Picker::create(10);
+    ItemPicker::create(10);
     expect(true)->toBe(true);
 });
 
 it('can have a default weight', function () {
-    Picker::create();
+    ItemPicker::create();
     expect(true)->toBe(true);
 });
 
 it('cannot add an item with a negative weight', function () {
-    Picker::create()->withItem(new \stdClass(), -1);
+    ItemPicker::create()->withItem(new \stdClass(), -1);
 })->throws(
     \InvalidArgumentException::class,
     '`weight` must be a positive integer.'
@@ -35,24 +35,24 @@ it('cannot add an item with a negative weight', function () {
 
 it('can add an item with a 0 weight', function () {
     $item = new \stdClass();
-    $picker = Picker::create()->withItem($item, 0);
+    $picker = ItemPicker::create()->withItem($item, 0);
     $picker->pick();
 })->throws(\RuntimeException::class, 'Nothing to pick.');
 
 it('can add an item with a positive weight', function () {
     $item = new \stdClass();
-    $picker = Picker::create()->withItem($item, 10);
+    $picker = ItemPicker::create()->withItem($item, 10);
     expect($picker->pick())->toBe($item);
 });
 
 it('can add an item with a default weight', function () {
     $item = new \stdClass();
-    $picker = Picker::create()->withItem($item);
+    $picker = ItemPicker::create()->withItem($item);
     expect($picker->pick())->toBe($item);
 });
 
 it('evenly picks items', function () {
-    $picker = Picker::create()
+    $picker = ItemPicker::create()
         ->withItem('foo', 500)
         ->withItem('bar', 500);
 
@@ -74,7 +74,7 @@ it('evenly picks items', function () {
 });
 
 it('evenly picks items with an array of items', function () {
-    $picker = Picker::create(500)->withItems(['foo', 'bar']);
+    $picker = ItemPicker::create(500)->withItems(['foo', 'bar']);
 
     $items = [];
     for ($i = 0; $i < 1000; $i++) {
@@ -94,7 +94,7 @@ it('evenly picks items with an array of items', function () {
 });
 
 it('picks more foos that bars', function () {
-    $picker = Picker::create()
+    $picker = ItemPicker::create()
         ->withItem('foo', 800)
         ->withItem('bar', 200);
 
@@ -116,7 +116,7 @@ it('picks more foos that bars', function () {
 });
 
 it('can shift items once they\'re picked', function () {
-    $picker = Picker::create(1, true);
+    $picker = ItemPicker::create(1, true);
     $picker = $picker->withItem('foo', 1000000);
     $picker = $picker->withItem('bar', 1);
 

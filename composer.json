@@ -10,20 +10,20 @@
     }
   ],
   "require": {
-    "php": ">=7.3"
+    "php": ">=8.2"
   },
   "autoload": {
     "psr-4": {
       "BenTools\\Picker\\": "src"
-    }
+    },
+    "files": [
+      "src/functions.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
       "BenTools\\Picker\\Tests\\": "tests"
-    },
-    "files": [
-      "vendor/symfony/var-dumper/Resources/functions/dump.php"
-    ]
+    }
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "@stable",
