@@ -11,8 +11,7 @@ use BenTools\Picker\ItemPicker\ItemPickerOptions;
 describe('Item picker with round-robin algorithm', function () {
     it('picks items in a round-robin fashion', function () {
         $items = ['a', 'b', 'c', 'd'];
-        $options = new ItemPickerOptions(algorithm: Algorithm::ROUND_ROBIN);
-        $picker = ItemPicker::create($items, $options);
+        $picker = ItemPicker::create($items, new ItemPickerOptions(algorithm: Algorithm::ROUND_ROBIN));
 
         $pickedItems = [];
         for ($i = 0; $i < 8; $i++) {

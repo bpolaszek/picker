@@ -19,7 +19,6 @@ final class ItemPickerOptions
         public readonly bool $allowDuplicates = true,
         public readonly int $maxLoops = PHP_INT_MAX,
         public ?int $seed = null,
-        public readonly bool $incrementSeed = false,
         public readonly WeightProviderInterface $weights = new NullWeightProvider(),
     ) {
         if ($this->defaultWeight < 0) {

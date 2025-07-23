@@ -21,7 +21,7 @@ final readonly class RandomAlgorithm implements PickerAlgorithmInterface
         $maxIndex = count($items) - 1;
         $nextIndex = NumberPicker::randomInt(0, max(0, $maxIndex), $options->seed);
 
-        if (null !== $options->seed && $options->incrementSeed) {
+        if (null !== $options->seed) {
             $options->seed++;
         }
 

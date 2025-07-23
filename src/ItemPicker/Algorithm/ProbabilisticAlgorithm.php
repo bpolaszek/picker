@@ -46,7 +46,7 @@ final readonly class ProbabilisticAlgorithm implements PickerAlgorithmInterface
 
         $random = NumberPicker::randomInt(0, $totalWeight - 1, $options->seed);
 
-        if (null !== $options->seed && $options->incrementSeed) {
+        if (null !== $options->seed) {
             $options->seed++;
         }
 
