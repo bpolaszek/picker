@@ -27,14 +27,9 @@ final class RoundRobinAlgorithm implements PickerAlgorithmInterface
         $this->currentIndex[$items] ??= -1;
         $maxIndex = count($items) - 1;
 
-        NextIndex:
-        $this->currentIndex[$items]->currentIndex++;
-        if ($this->currentIndex[$items]->currentIndex > $maxIndex) {
+        $this->currentIndex[$items]++;
+        if ($this->currentIndex[$items] > $maxIndex) {
             $this->currentIndex[$items] = 0; // Reset to the beginning
-        }
-
-        if (!isset($items[$state->currentIndex])) {
-            goto NextIndex;
         }
 
         $index = $this->currentIndex[$items];
