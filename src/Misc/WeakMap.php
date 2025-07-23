@@ -19,6 +19,7 @@ use function spl_object_hash;
 use function sprintf;
 
 /**
+ * A WeakMap implementation that also allows for non-object keys.
  * @internal
  */
 final class WeakMap implements ArrayAccess, Countable, IteratorAggregate
