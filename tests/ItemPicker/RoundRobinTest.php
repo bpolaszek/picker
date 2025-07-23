@@ -7,6 +7,8 @@ namespace BenTools\Picker\Tests\ItemPicker;
 use BenTools\Picker\ItemPicker\Algorithm\Algorithm;
 use BenTools\Picker\ItemPicker\ItemPicker;
 use BenTools\Picker\ItemPicker\ItemPickerOptions;
+use RuntimeException;
+use stdClass;
 
 describe('Item picker with round-robin algorithm', function () {
     it('picks items in a round-robin fashion', function () {
@@ -22,9 +24,9 @@ describe('Item picker with round-robin algorithm', function () {
     });
 
     it('also works with objects', function () {
-        $a = new \stdClass();
-        $b = new \stdClass();
-        $c = new \stdClass();
+        $a = new stdClass();
+        $b = new stdClass();
+        $c = new stdClass();
 
         $picker = ItemPicker::create([$a, $b, $c], new ItemPickerOptions(algorithm: Algorithm::ROUND_ROBIN));
         $pickedItems = [];
@@ -43,7 +45,7 @@ describe('Item picker with round-robin algorithm', function () {
         for ($i = 0; $i < 10; $i++) {
             try {
                 $pickedItems[] = $picker->pick();
-            } catch (\RuntimeException $e) {
+            } catch (RuntimeException) {
                 break; // Stop picking when max loops is reached
             }
         }

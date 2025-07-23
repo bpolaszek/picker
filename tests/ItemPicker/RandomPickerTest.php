@@ -7,6 +7,8 @@ namespace BenTools\Picker\Tests\ItemPicker;
 use BenTools\Picker\ItemPicker\Algorithm\Algorithm;
 use BenTools\Picker\ItemPicker\ItemPicker;
 use BenTools\Picker\ItemPicker\ItemPickerOptions;
+use RuntimeException;
+use stdClass;
 use WeakMap;
 
 use function array_chunk;
@@ -43,9 +45,9 @@ describe('Item picker with random algorithm', function () {
     });
 
     it('also works with objects', function () {
-        $a = new \stdClass();
-        $b = new \stdClass();
-        $c = new \stdClass();
+        $a = new stdClass();
+        $b = new stdClass();
+        $c = new stdClass();
 
         $picker = ItemPicker::create([$a, $b, $c], new ItemPickerOptions(algorithm: Algorithm::RANDOM));
         $pickedItems = [];
@@ -83,7 +85,7 @@ describe('Item picker with random algorithm', function () {
         for ($i = 0; $i < 1_000; $i++) {
             try {
                 $pickedItems[] = $picker->pick();
-            } catch (\RuntimeException $e) {
+            } catch (RuntimeException) {
                 break; // Stop picking when max loops is reached
             }
         }
@@ -132,9 +134,9 @@ describe('Item picker with random algorithm', function () {
     });
 
     it('avoid duplicates with objects', function () {
-        $a = new \stdClass();
-        $b = new \stdClass();
-        $c = new \stdClass();
+        $a = new stdClass();
+        $b = new stdClass();
+        $c = new stdClass();
 
         $picker = ItemPicker::create([$a, $b, $c], new ItemPickerOptions(algorithm: Algorithm::RANDOM, allowDuplicates: false));
         $pickedItems = [];
