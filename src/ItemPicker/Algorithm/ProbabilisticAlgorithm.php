@@ -55,7 +55,8 @@ final readonly class ProbabilisticAlgorithm implements PickerAlgorithmInterface
                 return $items[$indexes[$item]];
             }
         }
-        throw new \RuntimeException('Unable to pick an item, this should not happen');
+
+        throw new \RuntimeException('Unable to pick an item, this should not happen'); // @codeCoverageIgnore
     }
 
 }

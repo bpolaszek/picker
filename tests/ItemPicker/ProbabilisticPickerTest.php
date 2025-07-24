@@ -8,6 +8,7 @@ use BenTools\Picker\ItemPicker\Algorithm\Algorithm;
 use BenTools\Picker\ItemPicker\ItemPicker;
 use BenTools\Picker\ItemPicker\ItemPickerOptions;
 use BenTools\Picker\ItemPicker\Weight\Weights;
+use InvalidArgumentException;
 use RuntimeException;
 use stdClass;
 use WeakMap;
@@ -231,4 +232,35 @@ describe('Item picker with probabilistic algorithm', function () {
                 ->and($counters[$c])->toEqual(1);
         }
     });
+
+    it('yells if a weight is lower than 0', function () {
+        $items = ['a', 'b', 'c'];
+        $weights = [
+            'a' => 10,
+            'b' => -5, // Invalid weight
+            'c' => 30,
+        ];
+        $picker = ItemPicker::create($items, new ItemPickerOptions(
+            algorithm: Algorithm::RANDOM,
+            weights: Weights::fromAssociativeArray($weights)
+        ));
+
+        expect(fn() => $picker->pick())->toThrow(InvalidArgumentException::class, 'Weight must be non-negative');
+    });
+
+    it('yells if total weight is 0', function () {
+        $items = ['a', 'b', 'c'];
+        $weights = [
+            'a' => 0,
+            'b' => 0,
+            'c' => 0, // Total weight is 0
+        ];
+        $picker = ItemPicker::create($items, new ItemPickerOptions(
+            algorithm: Algorithm::RANDOM,
+            weights: Weights::fromAssociativeArray($weights)
+        ));
+
+        expect(fn() => $picker->pick())->toThrow(InvalidArgumentException::class, 'Total weight must be greater than 0');
+    });
+
 });
