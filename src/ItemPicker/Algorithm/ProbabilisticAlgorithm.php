@@ -9,12 +9,23 @@ use BenTools\Picker\ItemPicker\PickerItemCollection;
 use BenTools\Picker\Misc\WeakMap;
 use BenTools\Picker\NumberPicker\NumberPicker;
 use InvalidArgumentException;
+use WeakMap as NativeWeakMap;
 
 /**
  * @internal
  */
 final readonly class ProbabilisticAlgorithm implements PickerAlgorithmInterface
 {
+    /**
+     * @var NativeWeakMap<PickerItemCollection, int>
+     */
+    private NativeWeakMap $seeds;
+
+    public function __construct()
+    {
+        $this->seeds = new NativeWeakMap();
+    }
+
     /**
      * @template T
      * @param PickerItemCollection<T> $items
@@ -26,6 +37,9 @@ final readonly class ProbabilisticAlgorithm implements PickerAlgorithmInterface
         $totalWeight = 0;
         $cumulativeWeights = new WeakMap();
         $indexes = new  WeakMap();
+        if (!isset($this->seeds[$items])) {
+            $this->seeds->offsetSet($items, $options->seed);
+        }
 
         foreach ($items as $index => $item) {
             $indexes[$item] = $index;
@@ -44,10 +58,10 @@ final readonly class ProbabilisticAlgorithm implements PickerAlgorithmInterface
             throw new InvalidArgumentException('Total weight must be greater than 0');
         }
 
-        $random = NumberPicker::randomInt(0, $totalWeight - 1, $options->seed);
+        $random = NumberPicker::randomInt(0, $totalWeight - 1, $this->seeds[$items]);
 
         if (null !== $options->seed) {
-            $options->seed++;
+            $this->seeds->offsetSet($items, $this->seeds[$items] + 1);
         }
 
         foreach ($cumulativeWeights as $item => $cumulativeWeight) {

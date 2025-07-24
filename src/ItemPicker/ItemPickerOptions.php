@@ -11,15 +11,15 @@ use InvalidArgumentException;
 
 use const PHP_INT_MAX;
 
-final class ItemPickerOptions
+final readonly class ItemPickerOptions
 {
     public function __construct(
-        public readonly Algorithm $algorithm = Algorithm::RANDOM,
-        public readonly int $defaultWeight = 1,
-        public readonly bool $allowDuplicates = true,
-        public readonly int $maxLoops = PHP_INT_MAX,
+        public Algorithm $algorithm = Algorithm::RANDOM,
+        public int $defaultWeight = 1,
+        public bool $allowDuplicates = true,
+        public int $maxLoops = PHP_INT_MAX,
         public ?int $seed = null,
-        public readonly WeightProviderInterface $weights = new NullWeightProvider(),
+        public WeightProviderInterface $weights = new NullWeightProvider(),
     ) {
         if ($this->defaultWeight < 0) {
             throw new InvalidArgumentException('Default weight must be non-negative');
