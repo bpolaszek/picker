@@ -18,6 +18,6 @@ final class StaticItemCollection extends PickerItemCollection
 
     public function count(): int
     {
-        return $this->nbItems ??= count($this->items);
+        return $this->nbItems ??= count($this->items); // @phpstan-ignore return.type
     }
 }

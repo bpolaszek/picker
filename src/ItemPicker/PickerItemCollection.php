@@ -13,6 +13,8 @@ use function array_values;
 
 /**
  * @template T
+ * @implements ArrayAccess<int, T>
+ * @implements IteratorAggregate<int, T>
  */
 abstract class PickerItemCollection implements ArrayAccess, Countable, IteratorAggregate
 {

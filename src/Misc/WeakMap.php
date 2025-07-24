@@ -21,9 +21,16 @@ use function sprintf;
 /**
  * A WeakMap implementation that also allows for non-object keys.
  * @internal
+ * @template TKey
+ * @template TValue
+ * @implements ArrayAccess<TKey, TValue>
+ * @implements IteratorAggregate<TKey, TValue>
  */
 final class WeakMap implements ArrayAccess, Countable, IteratorAggregate
 {
+    /**
+     * @var array<TKey, array{WeakReference<object>|TKey, TValue}>
+     */
     private array $storage = [];
 
     public function offsetExists(mixed $offset): bool
@@ -58,6 +65,7 @@ final class WeakMap implements ArrayAccess, Countable, IteratorAggregate
     {
         $key = $this->computeKey($offset);
 
+        // @phpstan-ignore-next-line
         $this->storage[$key] = [
             is_object($offset) ? WeakReference::create($offset) : $offset,
             $value,
@@ -78,7 +86,7 @@ final class WeakMap implements ArrayAccess, Countable, IteratorAggregate
                     continue; // Skip if the object has been garbage collected
                 }
             }
-            yield $offset => $value;
+            yield $offset => $value; // @phpstan-ignore generator.keyType
         }
     }
 
@@ -91,7 +99,7 @@ final class WeakMap implements ArrayAccess, Countable, IteratorAggregate
     {
         $key = match (is_object($offset)) {
             true => sprintf('obj:%s', spl_object_hash($offset)),
-            default => sprintf('%s:%s', gettype($offset), $offset),
+            default => sprintf('%s:%s', gettype($offset), $offset), // @phpstan-ignore argument.type
         };
 
         return hash('xxh64', $key);

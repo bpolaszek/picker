@@ -13,10 +13,14 @@ use function count;
 
 /**
  * @internal
+ * @template T
  */
 final class RoundRobinAlgorithm implements PickerAlgorithmInterface
 {
-    private WeakMap $currentIndex;
+    /**
+     * @var WeakMap<ItemPicker, int>
+     */
+    private WeakMap $currentIndex; // @phpstan-ignore missingType.generics
 
     public function __construct()
     {

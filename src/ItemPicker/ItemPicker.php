@@ -22,6 +22,9 @@ final class ItemPicker implements PickerInterface
     private int $itemsPerLoop;
     private ?int $seed = null;
 
+    /**
+     * @param PickerItemCollection<T> $items
+     */
     private function __construct(
         private readonly PickerItemCollection $items,
         private readonly PickerAlgorithmInterface $algorithm,
@@ -61,6 +64,10 @@ final class ItemPicker implements PickerInterface
         $this->seed++;
     }
 
+    /**
+     * @param iterable<T> $items
+     * @return ItemPicker<T>
+     */
     public static function create(
         iterable $items,
         ItemPickerOptions $options = new ItemPickerOptions(),

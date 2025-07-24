@@ -58,7 +58,7 @@ describe('StaticItemCollection', function () {
     it('throws exception when accessing non-existent offset', function () {
         $items = ['a', 'b', 'c'];
         $collection = new StaticItemCollection($items);
-        $collection[3];
+        $collection[3]; // @phpstan-ignore expr.resultUnused
     })->throws(OutOfBoundsException::class, 'Offset 3 does not exist.');
 
     it('throws exception when trying to set an offset', function () {

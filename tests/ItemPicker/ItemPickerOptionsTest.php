@@ -25,7 +25,7 @@ describe('ItemPickerOptions', function () {
     });
 
     it('accepts custom values', function () {
-        $weightProvider = $this->createMock(WeightProviderInterface::class);
+        $weightProvider = $this->createMock(WeightProviderInterface::class); // @phpstan-ignore method.protected
         $options = new ItemPickerOptions(
             algorithm: Algorithm::ROUND_ROBIN,
             defaultWeight: 5,

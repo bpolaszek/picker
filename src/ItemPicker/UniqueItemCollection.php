@@ -16,8 +16,14 @@ use function array_values;
  */
 final class UniqueItemCollection extends PickerItemCollection
 {
+    /**
+     * @var T[]
+     */
     private array $initialItems;
 
+    /**
+     * @param T[] $items
+     */
     public function __construct(array $items)
     {
         parent::__construct($items);

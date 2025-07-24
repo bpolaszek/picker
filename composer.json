@@ -28,7 +28,8 @@
   "require-dev": {
     "symfony/var-dumper": "^7.1",
     "pestphp/pest": "^3.5",
-    "friendsofphp/php-cs-fixer": "^3.84"
+    "friendsofphp/php-cs-fixer": "^3.84",
+    "phpstan/phpstan": "^2.1"
   },
   "config": {
     "allow-plugins": {
@@ -43,6 +44,13 @@
     "style:fix": [
       "php-cs-fixer fix src",
       "php-cs-fixer fix tests"
+    ],
+    "types:check": "phpstan analyse src tests --level 9",
+    "tests:run": "pest --coverage --min=100",
+    "ci:check": [
+      "@style:check",
+      "@types:check",
+      "@tests:run"
     ]
   }
 }

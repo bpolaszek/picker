@@ -21,7 +21,7 @@ final readonly class Picker
         iterable $items,
         ItemPickerOptions $options = new ItemPickerOptions(),
     ): PickerInterface {
-        return ItemPicker::create($items, $options);
+        return ItemPicker::create($items, $options); // @phpstan-ignore return.type
     }
 
     public static function betweenNumbers(

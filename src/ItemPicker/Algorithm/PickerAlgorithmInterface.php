@@ -13,6 +13,7 @@ interface PickerAlgorithmInterface
     /**
      * @template T
      * @param PickerItemCollection<T> $items
+     * @param ItemPicker<T> $picker
      *
      * @return T
      */

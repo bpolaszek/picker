@@ -67,7 +67,7 @@ describe('Item picker with probabilistic algorithm', function () {
 
         $picker = ItemPicker::create([$a, $b, $c, $d], new ItemPickerOptions(
             algorithm: Algorithm::RANDOM,
-            weights: Weights::fromWeakMap($weights),
+            weights: Weights::fromWeakMap($weights), // @phpstan-ignore argument.type
         ));
 
         $pickedItems = [];
@@ -210,7 +210,7 @@ describe('Item picker with probabilistic algorithm', function () {
         $picker = ItemPicker::create([$a, $b, $c], new ItemPickerOptions(
             algorithm: Algorithm::RANDOM,
             allowDuplicates: false,
-            weights: Weights::fromWeakMap($weights),
+            weights: Weights::fromWeakMap($weights), // @phpstan-ignore argument.type
         ));
         $pickedItems = [];
         for ($i = 0; $i < 12_000; $i++) {

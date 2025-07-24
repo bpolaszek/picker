@@ -30,10 +30,11 @@ describe('UniqueItemCollection', function () {
         expect($collection)->toHaveCount(3);
 
         $value = $collection[0];
-        expect($value)->toBe('a');
-        expect($collection)->toHaveCount(2);
-        expect($collection[0])->toBe('b'); // The previous 'b' at index 1 is now at index 0
-        expect($collection)->toHaveCount(1);
+        expect($value)->toBe('a')
+            ->and($collection)->toHaveCount(2)
+            ->and($collection[0])->toBe('b')
+            ->and($collection)->toHaveCount(1);
+        // The previous 'b' at index 1 is now at index 0
     });
 
     it('resets to initial items when all items are accessed', function () {
@@ -115,15 +116,15 @@ describe('UniqueItemCollection', function () {
 
         expect($collection)->toHaveCount(5);
 
-        $collection[0]; // Remove 'a'
+        $collection[0]; // Remove 'a' // @phpstan-ignore expr.resultUnused
         expect($collection)->toHaveCount(4);
 
-        $collection[2]; // Remove item at new index 2 (which is 'd')
+        $collection[2]; // Remove item at new index 2 (which is 'd') // @phpstan-ignore expr.resultUnused
         expect($collection)->toHaveCount(3);
 
-        $collection[0]; // Remove 'b'
-        $collection[0]; // Remove 'c'
-        $collection[0]; // Remove 'e' and reset
+        $collection[0]; // Remove 'b' // @phpstan-ignore expr.resultUnused
+        $collection[0]; // Remove 'c' // @phpstan-ignore expr.resultUnused
+        $collection[0]; // Remove 'e' and reset // @phpstan-ignore expr.resultUnused
 
         expect($collection)->toHaveCount(5); // Reset to initial count
     });
@@ -132,7 +133,7 @@ describe('UniqueItemCollection', function () {
         $items = ['a', 'b', 'c', 'd', 'e'];
         $collection = new UniqueItemCollection($items);
 
-        $collection[2]; // Remove 'c'
+        $collection[2]; // Remove 'c' // @phpstan-ignore expr.resultUnused
         expect($collection[2])->toBe('d'); // Now 'd' is at index 2 after 'c' was removed
     });
 
@@ -140,7 +141,7 @@ describe('UniqueItemCollection', function () {
         $items = ['a', 'b', 'c'];
         $collection = new UniqueItemCollection($items);
 
-        $collection[3]; // This should throw an exception
+        $collection[3]; // This should throw an exception // @phpstan-ignore expr.resultUnused
     })->throws(OutOfBoundsException::class, 'Offset 3 does not exist.');
 
     it('stores a copy of initial items, not a reference', function () {
@@ -148,9 +149,9 @@ describe('UniqueItemCollection', function () {
         $collection = new UniqueItemCollection($initialArray);
 
         // Access all items to empty the collection
-        $collection[0];
-        $collection[0];
-        $collection[0];
+        $collection[0]; // @phpstan-ignore expr.resultUnused
+        $collection[0]; // @phpstan-ignore expr.resultUnused
+        $collection[0]; // @phpstan-ignore expr.resultUnused
 
         // Modify the original array
         $initialArray[0] = 'x';

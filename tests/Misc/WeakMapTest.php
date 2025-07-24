@@ -142,7 +142,7 @@ describe('WeakMap', function () {
             // Get the key we'll need to check after the object is gone
             $reflectionProperty = new ReflectionProperty($map, 'storage');
             $storage = $reflectionProperty->getValue($map);
-            $keyToCheck = array_key_first($storage);
+            $keyToCheck = array_key_first($storage); // @phpstan-ignore argument.type
 
             // Return what we need outside the closure
             return [$keyToCheck, $map];

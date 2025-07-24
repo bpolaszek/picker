@@ -10,6 +10,9 @@ use ValueError;
 use function abs;
 use function random_int;
 
+/**
+ * @implements PickerInterface<int>
+ */
 final class NumberPicker implements PickerInterface
 {
     private const LCG_MULTIPLIER = 1664525;
