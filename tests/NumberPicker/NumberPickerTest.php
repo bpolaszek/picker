@@ -32,10 +32,18 @@ describe('NumberPicker::pick()', function () {
         $max = 1_000_000_000;
         $seed = 12345;
         $options = new NumberPickerOptions(seed: $seed);
-        $picker = NumberPicker::create($min, $max, $options);
-        $result1 = $picker->pick();
-        $result2 = $picker->pick();
-        expect($result1)->toBe($result2);
+        $picker1 = NumberPicker::create($min, $max, $options);
+        $picker2 = NumberPicker::create($min, $max, $options);
+        $result1 = $picker1->pick();
+        $result2 = $picker2->pick();
+        $result3 = $picker1->pick();
+        $result4 = $picker2->pick();
+
+        expect($result1)->toBe($result2)
+            ->and($result3)->toBe($result4)
+            ->and($result1)->not->toBe($result3)
+            ->and($result2)->not->toBe($result4)
+        ;
     });
 
     it('returns different integers when different seeds are provided', function () {
@@ -49,16 +57,6 @@ describe('NumberPicker::pick()', function () {
         $picker2 = NumberPicker::create($min, $max, $options2);
         $result1 = $picker1->pick();
         $result2 = $picker2->pick();
-        expect($result1)->not->toBe($result2);
-    });
-
-    it('increments the seed when options are set to do so', function () {
-        $min = 0;
-        $max = 1_000_000_000;
-        $options = new NumberPickerOptions(incrementSeed: true);
-        $picker = NumberPicker::create($min, $max, $options);
-        $result1 = $picker->pick();
-        $result2 = $picker->pick();
         expect($result1)->not->toBe($result2);
     });
 });

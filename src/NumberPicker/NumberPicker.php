@@ -29,7 +29,7 @@ final class NumberPicker implements PickerInterface
     {
         $result = self::randomInt($this->min, $this->max, $this->seed);
 
-        if ($this->options->incrementSeed) {
+        if (null !== $this->seed) {
             $this->seed++;
         }
 

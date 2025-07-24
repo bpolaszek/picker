@@ -8,7 +8,6 @@ final readonly class NumberPickerOptions
 {
     public function __construct(
         public ?int $seed = null,
-        public bool $incrementSeed = false,
     ) {
     }
 }

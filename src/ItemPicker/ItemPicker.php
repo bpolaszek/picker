@@ -8,6 +8,7 @@ use BenTools\Picker\ItemPicker\Algorithm\PickerAlgorithmInterface;
 use BenTools\Picker\PickerInterface;
 
 use function count;
+use function is_array;
 
 /**
  * @template T
@@ -49,8 +50,8 @@ final class ItemPicker implements PickerInterface
         ItemPickerOptions $options = new ItemPickerOptions(),
     ): self {
         $pickerItems = match ($options->allowDuplicates) {
-            true => new StaticItemCollection($items),
-            false => new UniqueItemCollection($items),
+            true => new StaticItemCollection(is_array($items) ? $items : [...$items]),
+            false => new UniqueItemCollection(is_array($items) ? $items : [...$items]),
         };
 
         return new self($pickerItems, $options->algorithm->instantiate($options), $options);
