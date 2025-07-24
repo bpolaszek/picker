@@ -99,8 +99,14 @@ describe('NumberPicker::randomInt()', function () {
         expect($result1)->not->toBe($result2);
     });
 
-    it('throws an exception if min is greater than max', function () {
-        expect(fn () => NumberPicker::randomInt(10, 1))->toThrow(ValueError::class);
-    });
+    it('throws an exception if min is greater than max', function (int $min, int $max, ?int $seed = null) {
+        return NumberPicker::randomInt($min, $max, $seed);
+    })
+        ->throws(ValueError::class)
+        ->with(function () {
+            yield 'unseeded picker' => ['min' => 10, 'max' => 1];
+            yield 'seeded picker' => ['min' => 10, 'max' => 1, 'seed' => 123456];
+        })
+    ;
 });
 

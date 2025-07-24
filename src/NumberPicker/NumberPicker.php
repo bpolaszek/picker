@@ -20,7 +20,7 @@ final class NumberPicker implements PickerInterface
     private function __construct(
         public readonly int $min,
         public readonly int $max,
-        public NumberPickerOptions $options = new NumberPickerOptions(),
+        public readonly NumberPickerOptions $options = new NumberPickerOptions(),
     ) {
         $this->seed = $options->seed;
     }
