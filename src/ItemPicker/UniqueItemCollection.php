@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace BenTools\Picker\ItemPicker;
 
 use InvalidArgumentException;
-use OutOfBoundsException;
 
 use function array_values;
 
@@ -19,7 +18,7 @@ final class UniqueItemCollection extends PickerItemCollection
 {
     private array $initialItems;
 
-    public function __construct(iterable $items)
+    public function __construct(array $items)
     {
         parent::__construct($items);
         if ([] === $this->items) {
