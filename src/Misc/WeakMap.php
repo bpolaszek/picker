@@ -46,8 +46,8 @@ final class WeakMap implements ArrayAccess, Countable, IteratorAggregate
         if ($offset instanceof WeakReference) {
             $object = $offset->get();
             if (null === $object) {
-                unset($this->storage[$realOffset]);
-                throw new InvalidArgumentException("The object has been garbage collected.");
+                unset($this->storage[$realOffset]); // @codeCoverageIgnore
+                throw new InvalidArgumentException("The object has been garbage collected."); // @codeCoverageIgnore
             }
         }
 
