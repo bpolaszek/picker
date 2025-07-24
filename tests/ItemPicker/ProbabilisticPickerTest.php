@@ -9,6 +9,14 @@ use BenTools\Picker\ItemPicker\ItemPicker;
 use BenTools\Picker\ItemPicker\ItemPickerOptions;
 use BenTools\Picker\ItemPicker\Weight\Weights;
 use RuntimeException;
+use stdClass;
+use WeakMap;
+
+use function array_chunk;
+use function array_count_values;
+use function array_filter;
+use function array_slice;
+use function expect;
 
 describe('Item picker with probabilistic algorithm', function () {
     it('picks items in a probabilistic fashion', function () {
@@ -161,10 +169,66 @@ describe('Item picker with probabilistic algorithm', function () {
     });
 
     it('avoids duplicates', function () {
+        $items = ['a', 'b', 'c', 'd'];
+        $weights = [
+            'a' => 10,
+            'b' => 20,
+            'c' => 30,
+            'd' => 40,
+        ];
+        $picker = ItemPicker::create($items, new ItemPickerOptions(
+            algorithm: Algorithm::RANDOM,
+            allowDuplicates: false,
+            weights: Weights::fromAssociativeArray($weights),
+        ));
 
+        $pickedItems = [];
+        for ($i = 0; $i < 120; $i++) {
+            $pickedItems[] = $picker->pick();
+        }
+
+        // Assert items were picked in random order
+        expect(array_slice($pickedItems, 0, 8))
+            ->not()->toBe(['a', 'b', 'c', 'd', 'a', 'b', 'c', 'd']);
+
+        // Assert all items have been picked and no duplicates
+        foreach (array_chunk($pickedItems, 4) as $chunk) {
+            expect(array_count_values($chunk))->toHaveKeys(['a', 'b', 'c', 'd']);
+        }
     });
 
     it('avoid duplicates with objects', function () {
+        $a = new stdClass();
+        $b = new stdClass();
+        $c = new stdClass();
+        $weights = new \WeakMap();
+        $weights[$a] = 10;
+        $weights[$b] = 20;
+        $weights[$c] = 30;
 
+        $picker = ItemPicker::create([$a, $b, $c], new ItemPickerOptions(
+            algorithm: Algorithm::RANDOM,
+            allowDuplicates: false,
+            weights: Weights::fromWeakMap($weights),
+        ));
+        $pickedItems = [];
+        for ($i = 0; $i < 12_000; $i++) {
+            $pickedItems[] = $picker->pick();
+        }
+
+        // Assert items were picked in random order
+        expect(array_slice($pickedItems, 0, 9))
+            ->not()->toBe([$a, $b, $c, $a, $b, $c, $a, $b, $c]);
+
+        // Assert all items have been picked and no duplicates
+        foreach (array_chunk($pickedItems, 3) as $chunk) {
+            $counters = new WeakMap();
+            $counters[$a] = count(array_filter($chunk, fn($item) => $item === $a));
+            $counters[$b] = count(array_filter($chunk, fn($item) => $item === $b));
+            $counters[$c] = count(array_filter($chunk, fn($item) => $item === $c));
+            expect($counters[$a])->toEqual(1)
+                ->and($counters[$b])->toEqual(1)
+                ->and($counters[$c])->toEqual(1);
+        }
     });
 });
