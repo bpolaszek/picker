@@ -26,13 +26,23 @@
     }
   },
   "require-dev": {
-    "squizlabs/php_codesniffer": "@stable",
     "symfony/var-dumper": "^7.1",
-    "pestphp/pest": "^3.5"
+    "pestphp/pest": "^3.5",
+    "friendsofphp/php-cs-fixer": "^3.84"
   },
   "config": {
     "allow-plugins": {
       "pestphp/pest-plugin": true
     }
+  },
+  "scripts": {
+    "style:check": [
+      "php-cs-fixer check src",
+      "php-cs-fixer check tests"
+    ],
+    "style:fix": [
+      "php-cs-fixer fix src",
+      "php-cs-fixer fix tests"
+    ]
   }
 }

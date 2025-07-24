@@ -107,4 +107,3 @@ describe('NumberPicker::randomInt()', function () {
         })
     ;
 });
-

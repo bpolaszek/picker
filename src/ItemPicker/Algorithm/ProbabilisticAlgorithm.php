@@ -26,7 +26,7 @@ final readonly class ProbabilisticAlgorithm implements PickerAlgorithmInterface
     {
         $totalWeight = 0;
         $cumulativeWeights = new WeakMap();
-        $indexes = new  WeakMap();
+        $indexes = new WeakMap();
 
         foreach ($items as $index => $item) {
             $indexes[$item] = $index;

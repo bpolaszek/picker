@@ -61,9 +61,9 @@ describe('Item picker with random algorithm', function () {
 
         // Assert all items have been picked
         $counters = new WeakMap();
-        $counters[$a] = count(array_filter($pickedItems, fn($item) => $item === $a));
-        $counters[$b] = count(array_filter($pickedItems, fn($item) => $item === $b));
-        $counters[$c] = count(array_filter($pickedItems, fn($item) => $item === $c));
+        $counters[$a] = count(array_filter($pickedItems, fn ($item) => $item === $a));
+        $counters[$b] = count(array_filter($pickedItems, fn ($item) => $item === $b));
+        $counters[$c] = count(array_filter($pickedItems, fn ($item) => $item === $c));
         expect($counters[$a])->toBeGreaterThan(0)
             ->and($counters[$b])->toBeGreaterThan(0)
             ->and($counters[$c])->toBeGreaterThan(0);
@@ -151,9 +151,9 @@ describe('Item picker with random algorithm', function () {
         // Assert all items have been picked and no duplicates
         foreach (array_chunk($pickedItems, 3) as $chunk) {
             $counters = new WeakMap();
-            $counters[$a] = count(array_filter($chunk, fn($item) => $item === $a));
-            $counters[$b] = count(array_filter($chunk, fn($item) => $item === $b));
-            $counters[$c] = count(array_filter($chunk, fn($item) => $item === $c));
+            $counters[$a] = count(array_filter($chunk, fn ($item) => $item === $a));
+            $counters[$b] = count(array_filter($chunk, fn ($item) => $item === $b));
+            $counters[$c] = count(array_filter($chunk, fn ($item) => $item === $c));
             expect($counters[$a])->toEqual(1)
                 ->and($counters[$b])->toEqual(1)
                 ->and($counters[$c])->toEqual(1);

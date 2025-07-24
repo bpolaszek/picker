@@ -130,7 +130,7 @@ describe('WeakMap', function () {
         $map = new WeakMap();
 
         // Create a block scope to control object lifetime
-        (static function(WeakMap $map) {
+        (static function (WeakMap $map) {
             $tempObject = new stdClass();
             $map[$tempObject] = 'This value should disappear';
 

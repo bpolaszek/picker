@@ -78,10 +78,10 @@ describe('Item picker with probabilistic algorithm', function () {
 
         // Assert items were picked in a probabilistic manner
         $counters = new \WeakMap();
-        $counters[$a] = count(array_filter($pickedItems, fn($item) => $item === $a));
-        $counters[$b] = count(array_filter($pickedItems, fn($item) => $item === $b));
-        $counters[$c] = count(array_filter($pickedItems, fn($item) => $item === $c));
-        $counters[$d] = count(array_filter($pickedItems, fn($item) => $item === $d));
+        $counters[$a] = count(array_filter($pickedItems, fn ($item) => $item === $a));
+        $counters[$b] = count(array_filter($pickedItems, fn ($item) => $item === $b));
+        $counters[$c] = count(array_filter($pickedItems, fn ($item) => $item === $c));
+        $counters[$d] = count(array_filter($pickedItems, fn ($item) => $item === $d));
 
         expect($counters[$a])->toBeGreaterThanOrEqual($total * 0.1 * 0.8)
             ->and($counters[$a])->toBeLessThanOrEqual($total * 0.1 * 1.2)
@@ -224,9 +224,9 @@ describe('Item picker with probabilistic algorithm', function () {
         // Assert all items have been picked and no duplicates
         foreach (array_chunk($pickedItems, 3) as $chunk) {
             $counters = new WeakMap();
-            $counters[$a] = count(array_filter($chunk, fn($item) => $item === $a));
-            $counters[$b] = count(array_filter($chunk, fn($item) => $item === $b));
-            $counters[$c] = count(array_filter($chunk, fn($item) => $item === $c));
+            $counters[$a] = count(array_filter($chunk, fn ($item) => $item === $a));
+            $counters[$b] = count(array_filter($chunk, fn ($item) => $item === $b));
+            $counters[$c] = count(array_filter($chunk, fn ($item) => $item === $c));
             expect($counters[$a])->toEqual(1)
                 ->and($counters[$b])->toEqual(1)
                 ->and($counters[$c])->toEqual(1);
@@ -245,7 +245,7 @@ describe('Item picker with probabilistic algorithm', function () {
             weights: Weights::fromAssociativeArray($weights)
         ));
 
-        expect(fn() => $picker->pick())->toThrow(InvalidArgumentException::class, 'Weight must be non-negative');
+        expect(fn () => $picker->pick())->toThrow(InvalidArgumentException::class, 'Weight must be non-negative');
     });
 
     it('yells if total weight is 0', function () {
@@ -260,7 +260,7 @@ describe('Item picker with probabilistic algorithm', function () {
             weights: Weights::fromAssociativeArray($weights)
         ));
 
-        expect(fn() => $picker->pick())->toThrow(InvalidArgumentException::class, 'Total weight must be greater than 0');
+        expect(fn () => $picker->pick())->toThrow(InvalidArgumentException::class, 'Total weight must be greater than 0');
     });
 
 });
