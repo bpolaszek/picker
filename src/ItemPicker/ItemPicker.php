@@ -17,9 +17,10 @@ use function is_array;
  */
 final class ItemPicker implements PickerInterface
 {
-    public int $currentLoop = 0;
-    public int $nbPickedItems = 0;
-    public int $itemsPerLoop;
+    private int $currentLoop = 0;
+    private int $nbPickedItems = 0;
+    private int $itemsPerLoop;
+    private ?int $seed = null;
 
     private function __construct(
         private readonly PickerItemCollection $items,
@@ -27,6 +28,7 @@ final class ItemPicker implements PickerInterface
         private readonly ItemPickerOptions $options,
     ) {
         $this->itemsPerLoop = count($this->items);
+        $this->seed = $options->seed;
     }
 
     public function pick(): mixed
@@ -35,7 +37,7 @@ final class ItemPicker implements PickerInterface
             throw new \RuntimeException('Maximum number of loops reached');
         }
 
-        $pickedItem = $this->algorithm->pick($this->items, $this->options);
+        $pickedItem = $this->algorithm->pick($this->items, $this->options, $this);
 
         $this->nbPickedItems++;
         if (0 === ($this->nbPickedItems % $this->itemsPerLoop)) {
@@ -43,6 +45,20 @@ final class ItemPicker implements PickerInterface
         }
 
         return $pickedItem;
+    }
+
+    public function getSeed(): ?int
+    {
+        return $this->seed;
+    }
+
+    public function updateSeed(): void
+    {
+        if (null === $this->seed) {
+            return;
+        }
+
+        $this->seed++;
     }
 
     public static function create(

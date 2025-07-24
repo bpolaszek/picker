@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BenTools\Picker\ItemPicker\Algorithm;
 
+use BenTools\Picker\ItemPicker\ItemPicker;
 use BenTools\Picker\ItemPicker\ItemPickerOptions;
 use BenTools\Picker\ItemPicker\PickerItemCollection;
 
@@ -15,5 +16,5 @@ interface PickerAlgorithmInterface
      *
      * @return T
      */
-    public function pick(PickerItemCollection $items, ItemPickerOptions $options): mixed;
+    public function pick(PickerItemCollection $items, ItemPickerOptions $options, ItemPicker $picker): mixed;
 }
