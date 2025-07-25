@@ -1,6 +1,6 @@
 [![Latest Stable Version](https://poser.pugx.org/bentools/picker/v/stable)](https://packagist.org/packages/bentools/picker)
 [![License](https://poser.pugx.org/bentools/picker/license)](https://packagist.org/packages/bentools/picker)
-[![Build Status](https://img.shields.io/travis/bpolaszek/picker/master.svg?style=flat-square)](https://travis-ci.org/bpolaszek/picker)
+[![CI Workflow](https://github.com/bpolaszek/picker/actions/workflows/php.yml/badge.svg)](https://github.com/bpolaszek/picker/actions/workflows/php.yml)
 [![Coverage Status](https://coveralls.io/repos/github/bpolaszek/picker/badge.svg?branch=master)](https://coveralls.io/github/bpolaszek/picker?branch=master)
 [![Total Downloads](https://poser.pugx.org/bentools/picker/downloads)](https://packagist.org/packages/bentools/picker)
 
