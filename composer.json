@@ -10,29 +10,47 @@
     }
   ],
   "require": {
-    "php": ">=7.3"
+    "php": ">=8.2"
   },
   "autoload": {
     "psr-4": {
       "BenTools\\Picker\\": "src"
-    }
+    },
+    "files": [
+      "src/functions.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
       "BenTools\\Picker\\Tests\\": "tests"
-    },
-    "files": [
-      "vendor/symfony/var-dumper/Resources/functions/dump.php"
-    ]
+    }
   },
   "require-dev": {
-    "squizlabs/php_codesniffer": "@stable",
-    "symfony/var-dumper": "^5.4|^6.4|^7.1",
-    "pestphp/pest": "^1.22|^2.36|^3.5"
+    "symfony/var-dumper": "^7.1",
+    "pestphp/pest": "^3.5",
+    "friendsofphp/php-cs-fixer": "^3.84",
+    "phpstan/phpstan": "^2.1"
   },
   "config": {
     "allow-plugins": {
       "pestphp/pest-plugin": true
     }
+  },
+  "scripts": {
+    "style:check": [
+      "php-cs-fixer check src",
+      "php-cs-fixer check tests"
+    ],
+    "style:fix": [
+      "php-cs-fixer fix src",
+      "php-cs-fixer fix tests"
+    ],
+    "types:check": "phpstan analyse src tests --level 9",
+    "tests:run": "pest --coverage --min=100",
+    "ci:check": [
+      "@style:check",
+      "@types:check",
+      "@tests:run"
+    ]
   }
 }

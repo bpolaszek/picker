@@ -1,44 +1,68 @@
 name: CI Workflow
 
 on:
-    push:
-        branches: [ master ]
-    pull_request:
-        branches: [ master ]
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
 
-    tests:
-        runs-on: ubuntu-20.04
-        strategy:
-            max-parallel: 10
-            matrix:
-                php:
-                    - '7.3'
-                    - '7.4'
-                    - '8.0'
-                    - '8.1'
-                    - '8.2'
-                    - '8.3'
-                    - '8.4'
+  static-check:
+    runs-on: ubuntu-latest
 
-        steps:
-            -   name: Checkout code
-                uses: actions/checkout@v2
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-            -   name: Setup PHP
-                uses: shivammathur/setup-php@v2
-                with:
-                    php-version: ${{ matrix.php }}
-                    coverage: pcov
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+          coverage: pcov
 
-            -   name: Install dependencies
-                run: composer install --prefer-dist --no-interaction
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction
 
-            -   name: Execute tests
-                run: vendor/bin/pest --coverage-clover=coverage.xml
+      - name: Check style
+        run: composer style:check
 
-            -   name: Upload coverage to Codecov
-                uses: codecov/codecov-action@v1
-                with:
-                    token: ${{ secrets.CODECOV_TOKEN }}
+      - name: Check types
+        run: composer types:check
+
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 10
+      matrix:
+        php:
+          - '8.2'
+          - '8.3'
+          - '8.4'
+          - '8.5'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: pcov
+
+      - name: Install dependencies
+        run: |
+          if [ "${{ matrix.php }}" = "8.5" ]; then
+            composer install --prefer-dist --no-interaction --ignore-platform-req=php
+          else
+            composer install --prefer-dist --no-interaction
+          fi
+
+      - name: Execute tests
+        run: composer tests:run --coverage-clover=coverage.xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
