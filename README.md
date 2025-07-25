@@ -89,7 +89,7 @@ Installation
 
 This library requires PHP 8.2+.
 
-> composer require bentools/picker
+> composer require bentools/picker:3.x-dev
 
 Tests
 -----
