@@ -30,7 +30,12 @@ jobs:
                     coverage: pcov
 
             -   name: Install dependencies
-                run: composer install --prefer-dist --no-interaction
+                run: |
+                    if [ "${{ matrix.php }}" = "8.5" ]; then
+                      composer install --prefer-dist --no-interaction --ignore-platform-req=php
+                    else
+                      composer install --prefer-dist --no-interaction
+                    fi
 
             -   name: Check style
                 run: composer style:check
